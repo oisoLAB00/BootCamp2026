@@ -38,6 +38,6 @@ class ADC_lib
             emg_th[0] = emg_th[1] = 0;
         }
 
-        void cal_ADC_avg();
+        void cal_ADC_avg(int id);
 };
 

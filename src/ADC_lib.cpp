@@ -30,20 +30,13 @@ void ADC_lib::ADC_init()
     }
 }
 
-void ADC_lib::cal_ADC_avg()
+void ADC_lib::cal_ADC_avg(int id)
 {
-    int val = 0;
-    for(int size = 0; size < BUF_SIZE ; size++)
-    {
-        val += adc_buf[0][size]; 
-    }
-    adc_val[0] = val / BUF_SIZE;
-
-    val = 0;
-
+    long val = 0;
     for(int size = 0; size < BUF_SIZE; size++)
     {
-        val += adc_buf[1][size];
+        val += (long)adc_buf[id-1][size];
     }
-    adc_val[1] = val / BUF_SIZE;
+    adc_val[id-1] = (short)(val / BUF_SIZE);
+    
 }
