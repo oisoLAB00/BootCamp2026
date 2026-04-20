@@ -27,9 +27,9 @@ class ADC_lib
 
 
     private :
-        volatile int adc_val[ADC_NUM];
+        volatile short adc_val[ADC_NUM];
         int emg_th[ADC_NUM];
-        int adc_buf[ADC_NUM][BUF_SIZE];
+        short adc_buf[ADC_NUM][BUF_SIZE];
 
         void ADC_init();
 
