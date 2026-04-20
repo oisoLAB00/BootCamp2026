@@ -1,18 +1,49 @@
 #include "ADC_lib.hpp"
 
-void ADC_input::set_ADC_input(int* val)
+void ADC_lib::set_ADC_val(int emg_val1, int emg_val2, int fsr_val1, int fsr_val2)
 {
-    adc_val[0] = val[0];
-    adc_val[1] = val[1];
+    adc_val[0] = emg_val1;
+    adc_val[1] = emg_val2;
+    adc_val[2] = fsr_val1;
+    adc_val[3] = fsr_val2;
 }
 
-int ADC_input::get_ADC_val(int id)
+int ADC_lib::get_ADC_val(int id)
 {
     return adc_val[id-1];
 }
 
-void ADC_input::set_emg_th(int th_ID1, int th_ID2)
+void ADC_lib::set_emg_th(int th_ID1, int th_ID2)
 {
-    
+    emg_th[0] = th_ID1;
+    emg_th[1] = th_ID2;
 }
 
+void ADC_lib::ADC_init()
+{
+    adc_val[EMG_PIN_1] = adc_val[EMG_PIN_2] =  0;
+    for(int size = 0; size < BUF_SIZE; size++)
+    {
+        for(int id=0; id < ADC_NUM; id++){
+            adc_buf[id][size] = 0;
+        }
+    }
+}
+
+void ADC_lib::cal_ADC_avg()
+{
+    int val = 0;
+    for(int size = 0; size < BUF_SIZE ; size++)
+    {
+        val += adc_buf[0][size]; 
+    }
+    adc_val[0] = val / BUF_SIZE;
+
+    val = 0;
+
+    for(int size = 0; size < BUF_SIZE; size++)
+    {
+        val += adc_buf[1][size];
+    }
+    adc_val[1] = val / BUF_SIZE;
+}
