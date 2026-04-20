@@ -1,9 +1,12 @@
-
-
+namespace Task_Maneger{
+    enum class task_flow{STOP, CALIB, WORK};
+    enum class hand_state{OPEN, PRE_CATCH, CATCH}; 
+}
+/*
 class Task_Maneger{
   public :
     enum class task_flow{STOP, CALIB, WORK};
-    enum class hand_state{CATCH, PRE_CATCH, OPEN};
+    enum class hand_state{OPEN, PRE_CATCH, CATCH};
     Task_Maneger(){
 
     }
@@ -20,3 +23,5 @@ class Task_Maneger{
 
 
 };
+*/
+
