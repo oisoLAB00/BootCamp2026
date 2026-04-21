@@ -5,6 +5,8 @@
 #define EMG_PIN_2 1
 #define FSR_PIN_1 2
 #define FSR_PIN_2 3
+#define FSR_TH_VAL 100
+#define EMG_NUM 2
 
 class ADC_lib
 {
@@ -18,32 +20,35 @@ class ADC_lib
         ~ADC_lib()
         {
             ADC_reset();
-            Reset_emg_th();
+            Reset_ADC_th();
         }
 
         void ADC_init()
         {
             ADC_reset();
-            Reset_emg_th();
+            Reset_ADC_th();
+            set_ADC_th(FSR_PIN_1, FSR_TH_VAL);
+            set_ADC_th(FSR_PIN_2, FSR_TH_VAL);
         }
 
         void set_ADC_val(int emg_val1, int emg_val2, int fsr_val1, int fsr_val2);
         int get_ADC_val(int id);
-        void set_emg_th(int th_ID1, int th_ID2);
+        void set_ADC_th(int id, int threshold);
 
 
     private :
         volatile short adc_val[ADC_NUM];
-        int emg_th[ADC_NUM];
-        short adc_buf[ADC_NUM][BUF_SIZE];
+        int adc_th[ADC_NUM];
+        short adc_buf[EMG_NUM][BUF_SIZE];
 
         void ADC_reset();
-
-        void Reset_emg_th()
-        {
-            emg_th[0] = emg_th[1] = 0;
-        }
-
         void cal_ADC_avg(int id);
+        void Reset_ADC_th()
+        {
+            for(int i =0; i < ADC_NUM ; i++)
+            {
+                adc_th[i] = 0;
+            }
+        }
 };
 

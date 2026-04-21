@@ -13,7 +13,7 @@ class Servo_lib
     public :
         Servo_lib()
         {
-            
+            set_servo_default();
         }
 
         ~Servo_lib()
