@@ -19,7 +19,7 @@ void ADC_lib::set_emg_th(int th_ID1, int th_ID2)
     emg_th[1] = th_ID2;
 }
 
-void ADC_lib::ADC_init()
+void ADC_lib::ADC_reset()
 {
     adc_val[EMG_PIN_1] = adc_val[EMG_PIN_2] =  0;
     for(int size = 0; size < BUF_SIZE; size++)

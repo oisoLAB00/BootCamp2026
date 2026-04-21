@@ -6,8 +6,7 @@ void Servo_lib::set_PulseWidth2(int pulse1, int pulse2)
     pulse[1] = pulse2;
     Reg_servo_lim(pulse);
     
-    //gw_servo[0].writeMicroseconds(pulse[0]);
-    
+    gw_servo[0].writeMicroseconds(pulse[0]);
     gw_servo[1].writeMicroseconds(pulse[1]);
 }
 

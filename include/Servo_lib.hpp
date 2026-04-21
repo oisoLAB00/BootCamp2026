@@ -13,13 +13,18 @@ class Servo_lib
     public :
         Servo_lib()
         {
-            gw_servo[0].attach(SERVO_PIN_1, servo_min, servo_max);
-            gw_servo[1].attach(SERVO_PIN_2, servo_min, servo_max);
-            set_servo_default();
+            
         }
 
         ~Servo_lib()
         {
+            set_servo_default();
+        }
+
+        void Servo_init()
+        {
+            gw_servo[0].attach(SERVO_PIN_1, servo_min, servo_max);
+            gw_servo[1].attach(SERVO_PIN_2, servo_min, servo_max);
             set_servo_default();
         }
         void set_PulseWidth2(int pulse1, int pulse2);

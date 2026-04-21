@@ -25,6 +25,8 @@ Task_Maneger::hand_state hand = Task_Maneger::hand_state::OPEN;
 
 void setup() {
   Serial.begin(SERIAL_BAUD);
+  adc.ADC_init();
+  servo.Servo_init();
 } 
 
 void loop() {
@@ -60,9 +62,9 @@ void loop() {
     //servo.set_servo_default();
   }
 
-  if (adc.get_ADC_val(1) > 350) {
+  if (adc.get_ADC_val(1) > 100) {
       servo.set_PulseWidth_id(1, CATCH_DEG);
-  } else if (adc.get_ADC_val(1) < 100) {
+  } else if (adc.get_ADC_val(1) < 50) {
       servo.set_servo_default();
   }
   servo.set_PulseWidth2(servo.get_Pulse_val(1), servo.get_Pulse_val(2));//ここを後で変更
@@ -74,6 +76,7 @@ void loop() {
   //sprintf(s,"ADC =ch1 %d, ch2  %d, ch3  %d, ch4  %d", adc.get_ADC_val(1), adc.get_ADC_val(2), adc.get_ADC_val(3), adc.get_ADC_val(4));
   Serial.println(s);
   serial_printf(">FSR:%d\n", adc.get_ADC_val(1));
+  serial_printf(">servo:%d", servo.get_Pulse_val(1));
 
 
 

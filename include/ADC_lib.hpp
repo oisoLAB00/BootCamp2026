@@ -11,13 +11,19 @@ class ADC_lib
     public :
         ADC_lib()
         {
-            ADC_init();
-            Reset_emg_th();
+            //ADC_reset();
+            //Reset_emg_th();
         }
 
         ~ADC_lib()
         {
-            ADC_init();
+            ADC_reset();
+            Reset_emg_th();
+        }
+
+        void ADC_init()
+        {
+            ADC_reset();
             Reset_emg_th();
         }
 
@@ -31,7 +37,7 @@ class ADC_lib
         int emg_th[ADC_NUM];
         short adc_buf[ADC_NUM][BUF_SIZE];
 
-        void ADC_init();
+        void ADC_reset();
 
         void Reset_emg_th()
         {
