@@ -93,7 +93,7 @@ void loop() {
           servo.set_PulseWidth_id(2, CATCH_DEG);
 
         if(is_EMG_open)
-          hand = Task_Maneger::hand_state::PRE_CATCH;
+          hand = Task_Maneger::hand_state::OPEN;
         break;
     }
   }else{
