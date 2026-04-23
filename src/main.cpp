@@ -63,7 +63,8 @@ void loop() {
   }
 
   if (adc.get_ADC_val(1) > 100) {
-      servo.set_PulseWidth_id(1, CATCH_DEG);
+      servo.set_PulseWidth_id(1, CATCH_DEG1);
+      servo.set_PulseWidth_id(2, CATCH_DEG2);
   } else if (adc.get_ADC_val(1) < 50) {
       servo.set_servo_default();
   }
