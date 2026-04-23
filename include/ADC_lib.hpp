@@ -8,6 +8,11 @@
 #define FSR_TH_VAL 100
 #define EMG_NUM 2
 
+extern volatile bool is_EMG_close;
+extern volatile bool is_EMG_open;
+extern volatile bool is_FSR1;
+extern volatile bool is_FSR2;
+
 class ADC_lib
 {
     public :
@@ -31,9 +36,11 @@ class ADC_lib
             set_ADC_th(FSR_PIN_2, FSR_TH_VAL);
         }
 
+        void EMG_Calibration();
+
         void set_ADC_val(int emg_val1, int emg_val2, int fsr_val1, int fsr_val2);
         int get_ADC_val(int id);
-        void set_ADC_th(int id, int threshold);
+        
 
 
     private :
@@ -50,5 +57,6 @@ class ADC_lib
                 adc_th[i] = 0;
             }
         }
+        void set_ADC_th(int id, int threshold);
 };
 

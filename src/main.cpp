@@ -25,10 +25,10 @@ Task_Maneger::hand_state hand = Task_Maneger::hand_state::OPEN;
 bool is_calibed = false;
 bool is_ready = false;
 
-bool is_EMG_close = false;
-bool is_EMG_open = false;
-bool is_FSR1 = false;
-bool is_FSR2 = false;
+volatile bool is_EMG_close = false;
+volatile bool is_EMG_open = false;
+volatile bool is_FSR1 = false;
+volatile bool is_FSR2 = false;
 
 void setup() {
   Serial.begin(SERIAL_BAUD);
@@ -43,12 +43,13 @@ void loop() {
   switch(flow)   //動作フロー管理
   {
     case Task_Maneger::task_flow::STOP ://停止
-      if(!is_calibed)
+      if(!is_calibed){
         flow = Task_Maneger::task_flow::CALIB;
-      else if(is_ready)
+      }
+      else if(is_ready){
         flow = Task_Maneger::task_flow::WORK;
+      }
       break;
-
     case Task_Maneger::task_flow::CALIB ://キャリブレーション
       if(is_calibed)
         flow = Task_Maneger::task_flow::WORK;
@@ -83,7 +84,7 @@ void loop() {
           hand = Task_Maneger::hand_state::CATCH;
         }
         if(is_EMG_open)
-          hand = Task_Maneger::hand_state::PRE_CATCH;
+          hand = Task_Maneger::hand_state::OPEN;
         break;
       case Task_Maneger::hand_state::CATCH :  //把持モードで閉じた状態
         if(is_FSR1)
@@ -118,8 +119,6 @@ void loop() {
   //Teleplot用
   serial_printf(">FSR:%d\n", adc.get_ADC_val(EMG_PIN_1));
   serial_printf(">servo:%d", servo.get_Pulse_val(1));
-
-
 
   delay(100);//10Hz
 }
