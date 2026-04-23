@@ -66,6 +66,12 @@ void loop() {
     
   }
 
+  if(flow == Task_Maneger::task_flow::CALIB)
+  {
+    adc.EMG_Calibration();
+    is_calibed = true;
+  }
+
   if(flow == Task_Maneger::task_flow::WORK) //動作時のハンドのサーボ制御
   {
     switch(hand)  //ハンド状態
@@ -88,9 +94,9 @@ void loop() {
         break;
       case Task_Maneger::hand_state::CATCH :  //把持モードで閉じた状態
         if(is_FSR1)
-          servo.set_PulseWidth_id(1, CATCH_DEG);
+          servo.set_PulseWidth_id(1, CATCH_DEG_1);
         if(is_FSR2)
-          servo.set_PulseWidth_id(2, CATCH_DEG);
+          servo.set_PulseWidth_id(2, CATCH_DEG_2);
 
         if(is_EMG_open)
           hand = Task_Maneger::hand_state::OPEN;

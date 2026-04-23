@@ -47,6 +47,7 @@ class ADC_lib
         volatile short adc_val[ADC_NUM];
         int adc_th[ADC_NUM];
         short adc_buf[EMG_NUM][BUF_SIZE];
+        const int calib_time = 50;
 
         void ADC_reset();
         void cal_ADC_avg(int id);

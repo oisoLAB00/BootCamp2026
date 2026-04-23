@@ -2,11 +2,16 @@
 #include <Servo.h>
 
 #define SERVO_NUM 2
-#define SERVO_DEFAULT_1 1500
-#define SERVO_DEFAULT_2 1500
+
 #define SERVO_PIN_1 9
 #define SERVO_PIN_2 10
-#define CATCH_DEG 1000
+
+
+//servoの目標角度の変更はこちらで
+#define SERVO_DEFAULT_1 1500
+#define SERVO_DEFAULT_2 1500
+#define CATCH_DEG_1 1000
+#define CATCH_DEG_2 1000
 
 class Servo_lib
 {

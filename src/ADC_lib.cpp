@@ -77,6 +77,13 @@ void ADC_lib::cal_ADC_avg(int id)
     
 }
 
+//筋電センサのキャリブレーション
 void ADC_lib::EMG_Calibration()
 {
+    Reset_ADC_th();
+    for(int time = 0; time < calib_time; time++)
+    {
+        //delay(100);
+    }
+    
 }
