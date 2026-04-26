@@ -1,12 +1,18 @@
 #pragma once
+#include <Arduino.h>
 #define ADC_NUM 4
 #define BUF_SIZE 100
-#define EMG_PIN_1 0
-#define EMG_PIN_2 1
-#define FSR_PIN_1 2
-#define FSR_PIN_2 3
+#define EMG_PIN_1 34
+#define EMG_PIN_2 35
+#define FSR_PIN_1 32
+#define FSR_PIN_2 33
 #define FSR_TH_VAL 100
 #define EMG_NUM 2
+
+#define ID_EMG1 0
+#define ID_EMG2 1
+#define ID_FSR1 2
+#define ID_FSR2 3
 
 extern volatile bool is_EMG_close;
 extern volatile bool is_EMG_open;
@@ -30,10 +36,14 @@ class ADC_lib
 
         void ADC_init()
         {
+            pinMode(EMG_PIN_1, INPUT);
+            pinMode(EMG_PIN_2, INPUT);
+            pinMode(FSR_PIN_1, INPUT);
+            pinMode(FSR_PIN_2, INPUT);
             ADC_reset();
             Reset_ADC_th();
-            set_ADC_th(FSR_PIN_1, FSR_TH_VAL);
-            set_ADC_th(FSR_PIN_2, FSR_TH_VAL);
+            set_ADC_th(ID_FSR1, FSR_TH_VAL);
+            set_ADC_th(ID_FSR2, FSR_TH_VAL);
         }
 
         void EMG_Calibration();

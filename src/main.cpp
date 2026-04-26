@@ -88,9 +88,9 @@ void loop() {
         break;
       case Task_Maneger::hand_state::CATCH :  //把持モードで閉じた状態
         if(is_FSR1)
-          servo.set_PulseWidth_id(1, CATCH_DEG);
+          servo.set_PulseWidth_id(ID_SERVO1, CATCH_DEG1);
         if(is_FSR2)
-          servo.set_PulseWidth_id(2, CATCH_DEG);
+          servo.set_PulseWidth_id(ID_SERVO2, CATCH_DEG2);
 
         if(is_EMG_open)
           hand = Task_Maneger::hand_state::PRE_CATCH;
@@ -109,16 +109,16 @@ void loop() {
   */
 
   //servo駆動関数
-  servo.set_PulseWidth2(servo.get_Pulse_val(1), servo.get_Pulse_val(2));//ここを後で変更
+  servo.set_PulseWidth2(servo.get_Pulse_val(ID_SERVO1), servo.get_Pulse_val(ID_SERVO2));//ここを後で変更
  
   //シリアルモニター用
   char s[80];
-  sprintf(s, "FSR = ch1 %d,  servo %d", adc.get_ADC_val(1), servo.get_Pulse_val(1));
-  //sprintf(s,"ADC =ch1 %d, ch2  %d, ch3  %d, ch4  %d", adc.get_ADC_val(1), adc.get_ADC_val(2), adc.get_ADC_val(3), adc.get_ADC_val(4));
+  //sprintf(s, "FSR = ch1 %d,  servo %d", adc.get_ADC_val(ID_FSR1), servo.get_Pulse_val(ID_SERVO1));
+  sprintf(s,"ADC =ch1 %d, ch2  %d, ch3  %d, ch4  %d", adc.get_ADC_val(ID_EMG1), adc.get_ADC_val(ID_EMG2), adc.get_ADC_val(ID_FSR1), adc.get_ADC_val(ID_FSR2));
   Serial.println(s);
   //Teleplot用
-  serial_printf(">FSR:%d\n", adc.get_ADC_val(EMG_PIN_1));
-  serial_printf(">servo:%d", servo.get_Pulse_val(1));
+  serial_printf(">FSR:%d\n", adc.get_ADC_val(ID_FSR1));
+  serial_printf(">servo:%d", servo.get_Pulse_val(ID_SERVO1));
 
   delay(100);//10Hz
 }
