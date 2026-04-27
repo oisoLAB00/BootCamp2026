@@ -1,32 +1,32 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>EMG Monitor</title>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Sensor Monitor</title>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
+        <script src="/chart.js"></script>
+    </head>
 
-<body>
+    <body>
 
-<h1>ESP32 Sensor Monitor</h1>
+    <h1>ESP32 Sensor Monitor</h1>
 
-<h2>Current Mode</h2>
-<div id="mode">---</div>
+    <h2>Current Mode</h2>
+    <div id="mode">---</div>
 
-<h2>Calibration</h2>
-<button onclick="startCalib()">Start Calibration</button>
+    <h2>Calibration</h2>
+    <button onclick="startCalib()">Start Calibration</button>
 
-<h2>Mode Control</h2>
-<button onclick="setStop()">STOP</button>
-<button onclick="setWork()">WORK</button>
+    <h2>Mode Control</h2>
+    <button onclick="setStop()">STOP</button>
+    <button onclick="setWork()">WORK</button>
 
-<h2>EMG Threshold</h2>
-<input type="number" id="threshold" value="100">
-<button onclick="updateThreshold()">Update</button>
+    <h2>EMG Threshold</h2>
+    <input type="number" id="threshold" value="100">
+    <button onclick="updateThreshold()">Update</button>
 
-<canvas id="chart" width="600" height="300"></canvas>
+    <canvas id="chart" width="600" height="300"></canvas>
 
-<script src="/app.js"></script>
+    <script src="app.js"></script>
 
-</body>
-</html>
+    </body>
+    </html>

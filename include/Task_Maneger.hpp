@@ -1,3 +1,4 @@
+#pragma once
 #define LED1_PIN 14
 #define LED2_PIN 13
 #define LED3_PIN 15

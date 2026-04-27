@@ -30,6 +30,7 @@ class WiFi_GUI
     private :
         WebServer server;
         send_data send;
+        void Reset_sendData();
         void setupRoutes();
         String createSensorJson();
 
@@ -39,7 +40,6 @@ class WiFi_GUI
         void handle_SensorData();
         void handle_ThresholdUpdate();
         void handle_RootPage();
-
         
 
 };

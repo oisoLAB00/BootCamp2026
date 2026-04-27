@@ -124,11 +124,11 @@ void loop() {
   //シリアルモニター用
   char s[80];
   //sprintf(s, "FSR = ch1 %d,  servo %d", adc.get_ADC_val(ID_FSR1), servo.get_Pulse_val(ID_SERVO1));
-  sprintf(s,"ADC =ch1 %d, ch2  %d, ch3  %d, ch4  %d sw %d", adc.get_ADC_val(ID_EMG1), adc.get_ADC_val(ID_EMG2), adc.get_ADC_val(ID_FSR1), adc.get_ADC_val(ID_FSR2),sw_state);
-  Serial.println(s);
+  //sprintf(s,"ADC =ch1 %d, ch2  %d, ch3  %d, ch4  %d sw %d", adc.get_ADC_val(ID_EMG1), adc.get_ADC_val(ID_EMG2), adc.get_ADC_val(ID_FSR1), adc.get_ADC_val(ID_FSR2),sw_state);
+  //Serial.println(s);
   //Teleplot用
-  serial_printf(">FSR:%d\n", adc.get_ADC_val(ID_FSR1));
-  serial_printf(">servo:%d", servo.get_Pulse_val(ID_SERVO1));
+  //serial_printf(">FSR:%d\n", adc.get_ADC_val(ID_FSR1));
+  //serial_printf(">servo:%d", servo.get_Pulse_val(ID_SERVO1));
 
   delay(20);//10Hz
 }
