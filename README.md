@@ -11,21 +11,17 @@ platform IO (vscode拡張機能)
 
 ## 書き込み
 pioのターミナルを開いて, 以下を実行
-- データの消去
+- データの消去(ライブラリのリンクでエラーが出た場合)
 ```
 pio run --target erase
 ```
-- ファイル書き込み
+- ファイル書き込み(大体これだけでOK 普通のUpload)
 ```
 pio run --target upload
 ```
 - jsなどのライブラリファイル書き込み
 ```
 pio run --target uploadfs
-```
-- ファイル書き込み
-```
-pio run --target upload
 ```
 
 
