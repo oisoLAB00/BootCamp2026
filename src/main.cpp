@@ -1,3 +1,4 @@
+// pio run --target uploadfs
 #include <Arduino.h>
 #include "ADC_lib.hpp"
 #include "Servo_lib.hpp"
@@ -22,6 +23,8 @@ Servo_lib servo;
 ADC_lib adc;
 Task_Maneger::task_flow flow = Task_Maneger::task_flow::STOP;
 Task_Maneger::hand_state hand = Task_Maneger::hand_state::OPEN;
+SensorState sensorState;
+UICommand uiCommand;
 bool is_calibed = false;
 bool is_ready = false;
 
@@ -34,11 +37,13 @@ void setup() {
   Serial.begin(SERIAL_BAUD);
   adc.ADC_init();
   servo.Servo_init();
+  pinMode(MODE_SW, INPUT_PULLUP);
 } 
 
 void loop() {
   //センサ値計測
   adc.set_ADC_val(analogRead(EMG_PIN_1), analogRead(EMG_PIN_2), analogRead(FSR_PIN_1), analogRead(FSR_PIN_2));
+  bool sw_state = digitalRead(MODE_SW);
 
   switch(flow)   //動作フロー管理
   {
@@ -114,7 +119,7 @@ void loop() {
   //シリアルモニター用
   char s[80];
   //sprintf(s, "FSR = ch1 %d,  servo %d", adc.get_ADC_val(ID_FSR1), servo.get_Pulse_val(ID_SERVO1));
-  sprintf(s,"ADC =ch1 %d, ch2  %d, ch3  %d, ch4  %d", adc.get_ADC_val(ID_EMG1), adc.get_ADC_val(ID_EMG2), adc.get_ADC_val(ID_FSR1), adc.get_ADC_val(ID_FSR2));
+  sprintf(s,"ADC =ch1 %d, ch2  %d, ch3  %d, ch4  %d sw %d", adc.get_ADC_val(ID_EMG1), adc.get_ADC_val(ID_EMG2), adc.get_ADC_val(ID_FSR1), adc.get_ADC_val(ID_FSR2),sw_state);
   Serial.println(s);
   //Teleplot用
   serial_printf(">FSR:%d\n", adc.get_ADC_val(ID_FSR1));
