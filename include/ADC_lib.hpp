@@ -1,11 +1,13 @@
 #pragma once
 #include <Arduino.h>
+
 #define ADC_NUM 4
-#define BUF_SIZE 100
+#define BUF_SIZE 200
 #define EMG_PIN_1 34
 #define EMG_PIN_2 35
 #define FSR_PIN_1 32
 #define FSR_PIN_2 33
+#define MODE_SW 22
 #define FSR_TH_VAL 100
 #define EMG_NUM 2
 
@@ -40,6 +42,7 @@ class ADC_lib
             pinMode(EMG_PIN_2, INPUT);
             pinMode(FSR_PIN_1, INPUT);
             pinMode(FSR_PIN_2, INPUT);
+            pinMode(MODE_SW, INPUT_PULLUP);
             ADC_reset();
             Reset_ADC_th();
             set_ADC_th(ID_FSR1, FSR_TH_VAL);

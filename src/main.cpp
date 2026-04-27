@@ -3,6 +3,7 @@
 #include "ADC_lib.hpp"
 #include "Servo_lib.hpp"
 #include "Task_Maneger.hpp"
+#include "WiFi_GUI.hpp"
 
 #define SERIAL_BAUD 115200
 
@@ -23,7 +24,7 @@ Servo_lib servo;
 ADC_lib adc;
 Task_Maneger::task_flow flow = Task_Maneger::task_flow::STOP;
 Task_Maneger::hand_state hand = Task_Maneger::hand_state::OPEN;
-SensorState sensorState;
+WiFi_GUI wifi;
 UICommand uiCommand;
 bool is_calibed = false;
 bool is_ready = false;
@@ -37,7 +38,7 @@ void setup() {
   Serial.begin(SERIAL_BAUD);
   adc.ADC_init();
   servo.Servo_init();
-  pinMode(MODE_SW, INPUT_PULLUP);
+  wifi.begin();
 } 
 
 void loop() {
@@ -115,6 +116,10 @@ void loop() {
 
   //servo駆動関数
   servo.set_PulseWidth2(servo.get_Pulse_val(ID_SERVO1), servo.get_Pulse_val(ID_SERVO2));//ここを後で変更
+
+  
+  wifi.set_send_data(adc.get_ADC_val(ID_EMG1), adc.get_ADC_val(ID_EMG2), adc.get_ADC_val(ID_FSR1), adc.get_ADC_val(ID_FSR2), flow);
+  wifi.update();
  
   //シリアルモニター用
   char s[80];
@@ -125,6 +130,6 @@ void loop() {
   serial_printf(">FSR:%d\n", adc.get_ADC_val(ID_FSR1));
   serial_printf(">servo:%d", servo.get_Pulse_val(ID_SERVO1));
 
-  delay(100);//10Hz
+  delay(20);//10Hz
 }
 

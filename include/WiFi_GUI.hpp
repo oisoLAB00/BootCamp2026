@@ -1,6 +1,17 @@
 #pragma once
 #include <WiFi.h>
 #include <WebServer.h>
+#include <LittleFS.h>
+#include "Task_Maneger.hpp"
+
+struct send_data
+{
+    int emg1;
+    int emg2;
+    int fsr1;
+    int fsr2;
+    int mode;
+};
 
 class WiFi_GUI
 {
@@ -12,10 +23,13 @@ class WiFi_GUI
             server.handleClient();
         }
 
+        void set_send_data(int emg_1, int emg_2, int fsr_1, int fsr_2, Task_Maneger::task_flow flow);
+
         //void sendSensorData(const SystemState& state);
     
     private :
         WebServer server;
+        send_data send;
         void setupRoutes();
         String createSensorJson();
 
@@ -25,5 +39,7 @@ class WiFi_GUI
         void handle_SensorData();
         void handle_ThresholdUpdate();
         void handle_RootPage();
+
+        
 
 };
