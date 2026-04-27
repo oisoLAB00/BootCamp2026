@@ -9,6 +9,26 @@ platform IO (vscode拡張機能)
 ライブラリはESPServo 1.2.1ライブラリ使用
 可視化ツールとして Teleplot(vscode拡張機能)のインストール推奨
 
+## 書き込み
+pioのターミナルを開いて, 以下を実行
+- データの消去
+```
+pio run --target erase
+```
+- ファイル書き込み
+```
+pio run --target upload
+```
+- jsなどのライブラリファイル書き込み
+```
+pio run --target uploadfs
+```
+- ファイル書き込み
+```
+pio run --target upload
+```
+
+
 ## ESP32のピン番号(IOポート番号)
 ### ADC(センサ)
 ```ADC_lib.hpp
