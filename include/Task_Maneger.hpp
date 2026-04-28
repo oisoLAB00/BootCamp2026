@@ -6,7 +6,7 @@
 
 namespace Task_Maneger{
     enum class task_flow{STOP, CALIB, WORK};
-    enum class hand_state{OPEN, PRE_CATCH, CATCH}; 
+    enum class hand_state{OPEN, CATCH}; 
 }
 
 

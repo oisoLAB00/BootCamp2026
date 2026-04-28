@@ -60,6 +60,7 @@ class ADC_lib
         volatile short adc_val[ADC_NUM];
         int adc_th[ADC_NUM];
         short adc_buf[EMG_NUM][BUF_SIZE];
+        short emg_base[ADC_NUM];
 
         void ADC_reset();
         void cal_ADC_avg(int id);
@@ -71,5 +72,7 @@ class ADC_lib
             }
         }
         void set_ADC_th(int id, int threshold);
+        void set_EMG_base(int base_1, int base_2);
+        void set_EMG_raw_data(int emg_val1, int emg_val2);
 };
 

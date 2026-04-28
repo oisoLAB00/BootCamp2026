@@ -46,7 +46,7 @@ void loop() {
   adc.set_ADC_val(analogRead(EMG_PIN_1), analogRead(EMG_PIN_2), analogRead(FSR_PIN_1), analogRead(FSR_PIN_2));
   bool sw_state = !((bool)digitalRead(MODE_SW));
 
-  switch(flow)   //動作フロー管理
+   switch(flow)   //動作フロー管理
   {
     case Task_Maneger::task_flow::STOP ://停止
       if(!is_calibed){
@@ -72,6 +72,13 @@ void loop() {
     
   }
 
+  if(flow == Task_Maneger::task_flow::CALIB)
+  {
+    adc.EMG_Calibration();
+    is_calibed = true;
+    is_ready = true;
+  }
+
   if(flow == Task_Maneger::task_flow::WORK) //動作時のハンドのサーボ制御
   {
     switch(hand)  //ハンド状態
@@ -79,40 +86,26 @@ void loop() {
       case Task_Maneger::hand_state::OPEN : //ハンド開く
         servo.set_servo_default();
 
-        if(is_EMG_close){
-          hand = Task_Maneger::hand_state::PRE_CATCH;
-        }
-        break;
-      case Task_Maneger::hand_state::PRE_CATCH :  //把持モードで開いた状態
-        servo.set_servo_default();
-
-        if(is_FSR1 || is_FSR2){
+        if(is_EMG_open){//伸展の際に, 屈曲の電位も上がったための条件分岐
+          hand = Task_Maneger::hand_state::OPEN;
+        }else if(is_EMG_close){
           hand = Task_Maneger::hand_state::CATCH;
         }
-        if(is_EMG_open)
-          hand = Task_Maneger::hand_state::OPEN;
+        if(is_FSR1)
+          servo.set_PulseWidth_id(1, CATCH_DEG_1);
+        if(is_FSR2)
+          servo.set_PulseWidth_id(2, CATCH_DEG_2);
         break;
       case Task_Maneger::hand_state::CATCH :  //把持モードで閉じた状態
-        if(is_FSR1)
-          servo.set_PulseWidth_id(ID_SERVO1, CATCH_DEG1);
-        if(is_FSR2)
-          servo.set_PulseWidth_id(ID_SERVO2, CATCH_DEG2);
-
+        servo.set_PulseWidth_id(1, CATCH_DEG_1);
+        servo.set_PulseWidth_id(2, CATCH_DEG_2);
         if(is_EMG_open)
-          hand = Task_Maneger::hand_state::PRE_CATCH;
+          hand = Task_Maneger::hand_state::OPEN;
         break;
     }
   }else{
     servo.set_servo_default();
   }
-
-  /*
-  if (adc.get_ADC_val(EMG_PIN_1) > 100) {
-      servo.set_PulseWidth_id(1, CATCH_DEG);
-  } else if (adc.get_ADC_val(EMG_PIN_1) < 50) {
-      servo.set_servo_default();
-  }  
-  */
 
   //servo駆動関数
   servo.set_PulseWidth2(servo.get_Pulse_val(ID_SERVO1), servo.get_Pulse_val(ID_SERVO2));//ここを後で変更
@@ -127,7 +120,10 @@ void loop() {
   sprintf(s,"ADC =ch1 %d, ch2  %d, ch3  %d, ch4  %d sw %d", adc.get_ADC_val(ID_EMG1), adc.get_ADC_val(ID_EMG2), adc.get_ADC_val(ID_FSR1), adc.get_ADC_val(ID_FSR2),(int)sw_state);
   //Serial.println(s);
   //Teleplot用
-  //serial_printf(">FSR:%d\n", adc.get_ADC_val(ID_FSR1));
+  serial_printf(">FSR1:%d\n", adc.get_ADC_val(ID_FSR1));
+  serial_printf(">FSR2:%d\n", adc.get_ADC_val(ID_FSR2));
+  serial_printf(">EMG1:%d\n", adc.get_ADC_val(ID_EMG1));
+  serial_printf(">EMG2:%d\n", adc.get_ADC_val(ID_EMG2));
   //serial_printf(">servo:%d", servo.get_Pulse_val(ID_SERVO1));
 
   delay(20);//10Hz

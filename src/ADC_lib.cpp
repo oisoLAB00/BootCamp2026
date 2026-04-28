@@ -79,4 +79,34 @@ void ADC_lib::cal_ADC_avg(int id)
 
 void ADC_lib::EMG_Calibration()
 {
+    Reset_ADC_th();
+    for(int time = 0; time < BUF_SIZE; time++)
+    {
+        set_EMG_raw_data(analogRead(ID_EMG1), analogRead(ID_EMG2));
+        delay(10);
+    }
+    set_EMG_base(get_ADC_val(ID_EMG1), get_ADC_val(ID_EMG2));
+
+}
+void ADC_lib::set_EMG_raw_data(int emg_val1, int emg_val2)
+{
+    for(int size = 0; size < (BUF_SIZE-1); size++)
+    {
+        adc_buf[ID_EMG1][size+1] = adc_buf[ID_EMG1][size];
+    }
+    adc_buf[ID_EMG1][0] = emg_val1;
+    cal_ADC_avg(ID_EMG1);
+
+    for(int size = 0; size < (BUF_SIZE-1); size++)
+    {
+        adc_buf[ID_EMG2][size+1] = adc_buf[ID_EMG2][size];
+    }
+    adc_buf[ID_EMG2][0] = emg_val2;
+    cal_ADC_avg(ID_EMG2);
+}
+
+void ADC_lib::set_EMG_base(int base_1, int base_2)
+{
+    emg_base[ID_EMG1] = base_1;
+    emg_base[ID_EMG2] = base_2;
 }
