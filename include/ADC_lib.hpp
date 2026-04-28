@@ -2,7 +2,7 @@
 
 #include <Arduino.h>
 #define ADC_NUM 4
-#define BUF_SIZE 100
+#define BUF_SIZE 300
 #define EMG_PIN_1 0
 #define EMG_PIN_2 1
 #define FSR_PIN_1 2
@@ -10,8 +10,8 @@
 #define FSR_TH_VAL 100
 #define EMG_NUM 2
 
-#define EMG_TH_CLOSE 100 //ID1 (0)
-#define EMG_TH_OPEN 250 //ID2 (1)
+#define EMG_TH_CLOSE 250 //ID1 (0)
+#define EMG_TH_OPEN 200 //ID2 (1)
 
 extern bool is_calibed;
 
@@ -49,6 +49,10 @@ class ADC_lib
 
         void set_ADC_val(int emg_val1, int emg_val2, int fsr_val1, int fsr_val2);
         int get_ADC_val(int id);
+        int get_ADC_th(int id)
+        {
+            return adc_th[id];
+        }
         void set_ADC_th(int id, int threshold);
         
 

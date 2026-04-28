@@ -86,10 +86,18 @@ void loop() {
         }else if(is_EMG_close){
           hand = Task_Maneger::hand_state::CATCH;
         }
-        if(is_FSR1)
+        if(is_FSR1){
           servo.set_PulseWidth_id(1, CATCH_DEG_1);
-        if(is_FSR2)
+          if(is_EMG_open)
+            servo.set_PulseWidth_id(1, SERVO_DEFAULT_1);
+        }
+          
+        if(is_FSR2){
           servo.set_PulseWidth_id(2, CATCH_DEG_2);
+          if(is_EMG_open)
+            servo.set_PulseWidth_id(2, SERVO_DEFAULT_2);
+        }
+          
         break;
       case Task_Maneger::hand_state::CATCH :  //把持モードで閉じた状態
         servo.set_PulseWidth_id(1, CATCH_DEG_1);
@@ -111,10 +119,12 @@ void loop() {
   //sprintf(s,"ADC =ch1 %d, ch2  %d, ch3  %d, ch4  %d", adc.get_ADC_val(1), adc.get_ADC_val(2), adc.get_ADC_val(3), adc.get_ADC_val(4));
   Serial.println(s);
   //Teleplot用
-  serial_printf(">EMG1:%d\n", adc.get_ADC_val(EMG_PIN_1));
-  serial_printf(">EMG2:%d\n", adc.get_ADC_val(EMG_PIN_2));
-  serial_printf(">FSR1:%d\n", adc.get_ADC_val(FSR_PIN_1));
-  serial_printf(">FSR2:%d\n", adc.get_ADC_val(FSR_PIN_2));
+  serial_printf(">EMGclose:%d\n", adc.get_ADC_val(EMG_PIN_1));
+  serial_printf(">EMGopen:%d\n", adc.get_ADC_val(EMG_PIN_2));
+  serial_printf(">close_th:%d\n", adc.get_ADC_th(EMG_PIN_1));
+  serial_printf(">open_th:%d\n", adc.get_ADC_th(EMG_PIN_2));
+  //serial_printf(">FSR1:%d\n", adc.get_ADC_val(FSR_PIN_1));
+  //serial_printf(">FSR2:%d\n", adc.get_ADC_val(FSR_PIN_2));
   serial_printf(">Servo1:%d\n", servo.get_Pulse_val(ID_SERVO_1));
   serial_printf(">Servo2:%d\n", servo.get_Pulse_val(ID_SERVO_2));
 
