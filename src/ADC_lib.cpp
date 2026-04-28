@@ -32,11 +32,11 @@ void ADC_lib::set_ADC_val(int emg_val1, int emg_val2, int fsr_val1, int fsr_val2
     cal_ADC_avg(1);
 
     
-    if(emg_val1 > adc_th[0])
+    if(adc_val[EMG_PIN_1] > adc_th[0])
         is_EMG_open = true;
     else
         is_EMG_open = false;
-    if(emg_val2 > adc_th[1])
+    if(adc_val[EMG_PIN_2] > adc_th[1])
         is_EMG_close = true;
     else
         is_EMG_close = false;
@@ -78,7 +78,6 @@ void ADC_lib::cal_ADC_avg(int id)
 //筋電センサのキャリブレーション
 void ADC_lib::EMG_Calibration()
 {
-    Reset_ADC_th();
     for(int time = 0; time < BUF_SIZE; time++)
     {
         //set_ADC_val(analogRead(EMG_PIN_1), analogRead(EMG_PIN_2),analogRead(FSR_PIN_1), analogRead(FSR_PIN_2));

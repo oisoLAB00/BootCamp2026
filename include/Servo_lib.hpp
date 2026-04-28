@@ -6,6 +6,10 @@
 #define SERVO_PIN_1 9
 #define SERVO_PIN_2 10
 
+#define ID_SERVO_1 1
+#define ID_SERVO_2 2
+
+
 
 //把持時の角度を変更したいとき, ここを変更する(600~2400の範囲)
 #define SERVO_DEFAULT_1 1500 //servo1のデフォルトの角度

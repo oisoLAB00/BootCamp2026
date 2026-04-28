@@ -25,10 +25,10 @@ Task_Maneger::hand_state hand = Task_Maneger::hand_state::OPEN;
 bool is_calibed = false;
 bool is_ready = false;
 
-volatile bool is_EMG_close = false;
-volatile bool is_EMG_open = false;
-volatile bool is_FSR1 = false;
-volatile bool is_FSR2 = false;
+bool is_EMG_close = false;
+bool is_EMG_open = false;
+bool is_FSR1 = false;
+bool is_FSR2 = false;
 
 
 void setup() {
@@ -107,13 +107,16 @@ void loop() {
  
   //シリアルモニター用
   char s[80];
-  //sprintf(s, "FSR = ch1 %d,  servo %d", adc.get_ADC_val(1), servo.get_Pulse_val(1));
-  sprintf(s,"ADC =ch1 %d, ch2  %d, ch3  %d, ch4  %d", adc.get_ADC_val(1), adc.get_ADC_val(2), adc.get_ADC_val(3), adc.get_ADC_val(4));
+  sprintf(s, "close %d,  open %d", (int)is_EMG_close, (int)is_EMG_open);
+  //sprintf(s,"ADC =ch1 %d, ch2  %d, ch3  %d, ch4  %d", adc.get_ADC_val(1), adc.get_ADC_val(2), adc.get_ADC_val(3), adc.get_ADC_val(4));
   Serial.println(s);
   //Teleplot用
-  serial_printf(">EMG:%d\n", adc.get_ADC_val(EMG_PIN_1));
-  
-  serial_printf(">EMG2:%d", adc.get_ADC_val(EMG_PIN_2));
+  serial_printf(">EMG1:%d\n", adc.get_ADC_val(EMG_PIN_1));
+  serial_printf(">EMG2:%d\n", adc.get_ADC_val(EMG_PIN_2));
+  serial_printf(">FSR1:%d\n", adc.get_ADC_val(FSR_PIN_1));
+  serial_printf(">FSR2:%d\n", adc.get_ADC_val(FSR_PIN_2));
+  serial_printf(">Servo1:%d\n", servo.get_Pulse_val(ID_SERVO_1));
+  serial_printf(">Servo2:%d\n", servo.get_Pulse_val(ID_SERVO_2));
 
   delay(100);//10Hz
 }

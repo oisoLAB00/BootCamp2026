@@ -10,15 +10,15 @@
 #define FSR_TH_VAL 100
 #define EMG_NUM 2
 
-#define EMG_TH_CLOSE 100
-#define EMG_TH_OPEN 100
+#define EMG_TH_CLOSE 100 //ID1 (0)
+#define EMG_TH_OPEN 250 //ID2 (1)
 
 extern bool is_calibed;
 
-extern volatile bool is_EMG_close;
-extern volatile bool is_EMG_open;
-extern volatile bool is_FSR1;
-extern volatile bool is_FSR2;
+extern bool is_EMG_close;
+extern bool is_EMG_open;
+extern bool is_FSR1;
+extern bool is_FSR2;
 
 class ADC_lib
 {
