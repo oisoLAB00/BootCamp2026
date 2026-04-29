@@ -8,8 +8,11 @@
 #define FSR_PIN_1 32
 #define FSR_PIN_2 33
 #define MODE_SW 22
-#define FSR_TH_VAL 100
 #define EMG_NUM 2
+
+#define FSR_TH_VAL 100
+#define EMG_TH_OPEN_1 300
+#define EMG_TH_CLOSE_2 200
 
 #define ID_EMG1 0
 #define ID_EMG2 1
@@ -47,6 +50,8 @@ class ADC_lib
             Reset_ADC_th();
             set_ADC_th(ID_FSR1, FSR_TH_VAL);
             set_ADC_th(ID_FSR2, FSR_TH_VAL);
+            set_ADC_th(ID_EMG1, EMG_TH_OPEN_1);
+            set_ADC_th(ID_EMG2, EMG_TH_CLOSE_2);
         }
 
         void EMG_Calibration();
@@ -61,6 +66,7 @@ class ADC_lib
         int adc_th[ADC_NUM];
         short adc_buf[EMG_NUM][BUF_SIZE];
         short emg_base[ADC_NUM];
+        int buf_index{0};
 
         void ADC_reset();
         void cal_ADC_avg(int id);

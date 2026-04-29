@@ -10,20 +10,13 @@ void WiFi_GUI::begin() {
     Serial.print("AP IP Address: ");
     Serial.println(WiFi.softAPIP());
 
-    //-----------------------------------
-    // 開発中のみ true 推奨
-    // mount失敗時に自動フォーマット
-    //-----------------------------------
-    if (!LittleFS.begin(true)) {
+    if (!LittleFS.begin(true)) {//if(!LittleFS.begin()){ //安定したら, trueをなくす
         Serial.println("LittleFS mount failed");
         return;
     }
 
     Serial.println("LittleFS mount success");
 
-    //-----------------------------------
-    // 保存ファイル確認
-    //-----------------------------------
     Serial.println("=== LittleFS Files ===");
 
     File root = LittleFS.open("/");
@@ -53,10 +46,7 @@ void WiFi_GUI::Reset_sendData()
 }
 
 void WiFi_GUI::setupRoutes() {
-
-    //-------------------------
-    // root page（これ追加）
-    //-------------------------
+    //root
     server.on("/", HTTP_GET, [this]() {
         File file = LittleFS.open("/index.html", "r");
 
@@ -69,9 +59,6 @@ void WiFi_GUI::setupRoutes() {
         file.close();
     });
 
-    //-------------------------
-    // 静的ファイル（JSなど）
-    //-------------------------
     server.on("/app.js", HTTP_GET, [this]() {
         File file = LittleFS.open("/app.js", "r");
         server.streamFile(file, "application/javascript");
@@ -84,9 +71,6 @@ void WiFi_GUI::setupRoutes() {
         file.close();
     });
 
-    //-------------------------
-    // API
-    //-------------------------
     server.on("/sensor", HTTP_GET, [this]() {
         handle_SensorData();
     });

@@ -17,28 +17,19 @@ void ADC_lib::set_ADC_val(int emg_val1, int emg_val2, int fsr_val1, int fsr_val2
         is_FSR2 = false;
     }
 
-    for(int size = 0; size < (BUF_SIZE-1); size++)
-    {
-        adc_buf[ID_EMG1][size+1] = adc_buf[ID_EMG1][size];
-    }
-    adc_buf[ID_EMG1][0] = emg_val1;
+    adc_buf[ID_EMG1][buf_index] = emg_val1;
+    adc_buf[ID_EMG2][buf_index] = emg_val2;
+
+    buf_index = (buf_index + 1) % BUF_SIZE;
+
     cal_ADC_avg(ID_EMG1);
-
-    for(int size = 0; size < (BUF_SIZE-1); size++)
-    {
-        adc_buf[ID_EMG2][size+1] = adc_buf[ID_EMG2][size];
-    }
-    adc_buf[ID_EMG2][0] = emg_val2;
     cal_ADC_avg(ID_EMG2);
-
-    adc_val[0] = emg_val1;
-    adc_val[1] = emg_val2;
     
-    if(emg_val1 > adc_th[0])
+    if(adc_val[ID_EMG1] > adc_th[ID_EMG1])
         is_EMG_open = true;
     else
         is_EMG_open = false;
-    if(emg_val2 > adc_th[1])
+    if(adc_val[ID_EMG2] > adc_th[ID_EMG2])
         is_EMG_close = true;
     else
         is_EMG_close = false;
@@ -79,7 +70,6 @@ void ADC_lib::cal_ADC_avg(int id)
 
 void ADC_lib::EMG_Calibration()
 {
-    Reset_ADC_th();
     for(int time = 0; time < BUF_SIZE; time++)
     {
         set_EMG_raw_data(analogRead(ID_EMG1), analogRead(ID_EMG2));
@@ -90,19 +80,17 @@ void ADC_lib::EMG_Calibration()
 }
 void ADC_lib::set_EMG_raw_data(int emg_val1, int emg_val2)
 {
-    for(int size = 0; size < (BUF_SIZE-1); size++)
-    {
-        adc_buf[ID_EMG1][size+1] = adc_buf[ID_EMG1][size];
-    }
-    adc_buf[ID_EMG1][0] = emg_val1;
-    cal_ADC_avg(ID_EMG1);
+    adc_buf[ID_EMG1][buf_index] = emg_val1;
+    adc_buf[ID_EMG2][buf_index] = emg_val2;
 
-    for(int size = 0; size < (BUF_SIZE-1); size++)
-    {
-        adc_buf[ID_EMG2][size+1] = adc_buf[ID_EMG2][size];
-    }
-    adc_buf[ID_EMG2][0] = emg_val2;
+    cal_ADC_avg(ID_EMG1);
     cal_ADC_avg(ID_EMG2);
+
+    buf_index++;
+
+    if (buf_index >= BUF_SIZE) {
+        buf_index = 0;
+    }
 }
 
 void ADC_lib::set_EMG_base(int base_1, int base_2)
