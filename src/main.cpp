@@ -43,7 +43,7 @@ void setup() {
 
 void loop() {
   //センサ値計測
-  adc.set_ADC_val(analogRead(EMG_PIN_1), analogRead(EMG_PIN_2), analogRead(FSR_PIN_1), analogRead(FSR_PIN_2));
+  //adc.set_ADC_val(analogRead(EMG_PIN_1), analogRead(EMG_PIN_2), analogRead(FSR_PIN_1), analogRead(FSR_PIN_2));
   bool sw_state = !((bool)digitalRead(MODE_SW));
 
    switch(flow)   //動作フロー管理
@@ -133,6 +133,6 @@ void loop() {
   serial_printf(">servo1:%d", servo.get_Pulse_val(ID_SERVO1));
   serial_printf(">servo2:%d", servo.get_Pulse_val(ID_SERVO2));
 
-  delay(20);//10Hz
+  delay(20);//50Hz
 }
 

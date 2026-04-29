@@ -98,3 +98,44 @@ void ADC_lib::set_EMG_base(int base_1, int base_2)
     emg_base[ID_EMG1] = base_1;
     emg_base[ID_EMG2] = base_2;
 }
+
+void ADC_lib::update() {
+    adc_continuous_data_t *result = NULL;
+    uint32_t count = 0;
+
+    // DMAバッファからデータを取得
+    if (analogContinuousRead(&result, &count, READ_TIMEOUT_MS)) {
+        for (int i = 0; i < count; i++) {
+            int raw_val = result[i].avg_read_raw;
+            int pin = result[i].pin;
+
+            // ピン番号からIDを特定して格納
+            int id = -1;
+            if (pin == EMG_PIN_1) id = ID_EMG1;
+            else if (pin == EMG_PIN_2) id = ID_EMG2;
+            else if (pin == FSR_PIN_1) id = ID_FSR1;
+            else if (pin == FSR_PIN_2) id = ID_FSR2;
+
+            if (id != -1) {
+                if (id == ID_EMG1 || id == ID_EMG2) {
+                    // EMGは既存の移動平均ロジックへ
+                    adc_buf[id][buf_index] = raw_val;
+                } else {
+                    // FSRはそのまま格納（または別途平滑化）
+                    adc_val[id] = raw_val;
+                }
+            }
+        }
+        
+        // 既存の平均化・判定ロジック
+        buf_index = (buf_index + 1) % BUF_SIZE;
+        cal_ADC_avg(ID_EMG1);
+        cal_ADC_avg(ID_EMG2);
+
+        // 判定フラグ更新
+        is_FSR1 = (adc_val[ID_FSR1] > FSR_TH_VAL);
+        is_FSR2 = (adc_val[ID_FSR2] > FSR_TH_VAL);
+        is_EMG_open = (adc_val[ID_EMG1] > adc_th[ID_EMG1]);
+        is_EMG_close = (adc_val[ID_EMG2] > adc_th[ID_EMG2]);
+    }
+}

@@ -19,6 +19,11 @@
 #define ID_FSR1 2
 #define ID_FSR2 3
 
+//DMA設定
+#define CONVERSIONS_PER_PIN 10  // 1回の読み出しで各ピン何回サンプリングするか
+#define SAMPLING_FREQ 20000     // サンプリング周波数 20k[Hz]
+#define READ_TIMEOUT_MS 10
+
 extern volatile bool is_EMG_close;
 extern volatile bool is_EMG_open;
 extern volatile bool is_FSR1;
@@ -41,10 +46,15 @@ class ADC_lib
 
         void ADC_init()
         {
+            /*
             pinMode(EMG_PIN_1, INPUT);
             pinMode(EMG_PIN_2, INPUT);
             pinMode(FSR_PIN_1, INPUT);
             pinMode(FSR_PIN_2, INPUT);
+            */
+            analogContinuousInit(adc_pins, ADC_NUM, CONVERSIONS_PER_PIN, SAMPLING_FREQ, NULL);
+            analogContinuousSetAtten(ADC_ATTEN_DB_12);
+            analogContinuousStart();
             pinMode(MODE_SW, INPUT_PULLUP);
             ADC_reset();
             Reset_ADC_th();
@@ -55,7 +65,7 @@ class ADC_lib
         }
 
         void EMG_Calibration();
-
+        void update();
         void set_ADC_val(int emg_val1, int emg_val2, int fsr_val1, int fsr_val2);
         int get_ADC_val(int id);
         
@@ -67,6 +77,7 @@ class ADC_lib
         short adc_buf[EMG_NUM][BUF_SIZE];
         short emg_base[ADC_NUM];
         int buf_index{0};
+        uint8_t adc_pins[ADC_NUM] = {EMG_PIN_1, EMG_PIN_2, FSR_PIN_1, FSR_PIN_2};
 
         void ADC_reset();
         void cal_ADC_avg(int id);
