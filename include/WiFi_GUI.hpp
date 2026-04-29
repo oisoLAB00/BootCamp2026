@@ -4,6 +4,9 @@
 #include <LittleFS.h>
 #include "Task_Maneger.hpp"
 
+#define GUI_SSID "SENSOR_GUI"
+#define GUI_PASS "12345678"
+
 struct send_data
 {
     int emg1;

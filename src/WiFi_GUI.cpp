@@ -5,7 +5,7 @@ WiFi_GUI::WiFi_GUI() : server(80) {}
 void WiFi_GUI::begin() {
     Reset_sendData();
     
-    WiFi.softAP("SENSOR_GUI", "12345678");
+    WiFi.softAP(GUI_SSID, GUI_PASS);
 
     Serial.print("AP IP Address: ");
     Serial.println(WiFi.softAPIP());

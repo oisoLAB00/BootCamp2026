@@ -11,8 +11,8 @@
 #define EMG_NUM 2
 
 #define FSR_TH_VAL 100
-#define EMG_TH_OPEN_1 300
-#define EMG_TH_CLOSE_2 200
+#define EMG_TH_OPEN_1 2000
+#define EMG_TH_CLOSE_2 2000
 
 #define ID_EMG1 0
 #define ID_EMG2 1

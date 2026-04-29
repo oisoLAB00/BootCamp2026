@@ -91,14 +91,20 @@ void loop() {
         }else if(is_EMG_close){
           hand = Task_Maneger::hand_state::CATCH;
         }
-        if(is_FSR1)
+        if(is_FSR1){
           servo.set_PulseWidth_id(1, CATCH_DEG_1);
-        if(is_FSR2)
+          if(is_EMG_open)
+            servo.set_PulseWidth_id(1, SERVO_DEFAULT_1);
+        }
+        if(is_FSR2){
           servo.set_PulseWidth_id(2, CATCH_DEG_2);
+          if(is_EMG_open)
+            servo.set_PulseWidth_id(2, SERVO_DEFAULT_2);
+        }
         break;
       case Task_Maneger::hand_state::CATCH :  //把持モードで閉じた状態
-        servo.set_PulseWidth_id(1, CATCH_DEG_1);
-        servo.set_PulseWidth_id(2, CATCH_DEG_2);
+        servo.set_PulseWidth_id(ID_SERVO1, CATCH_DEG_1);
+        servo.set_PulseWidth_id(ID_SERVO2, CATCH_DEG_2);
         if(is_EMG_open)
           hand = Task_Maneger::hand_state::OPEN;
         break;
@@ -124,7 +130,8 @@ void loop() {
   serial_printf(">FSR2:%d\n", adc.get_ADC_val(ID_FSR2));
   serial_printf(">EMG1:%d\n", adc.get_ADC_val(ID_EMG1));
   serial_printf(">EMG2:%d\n", adc.get_ADC_val(ID_EMG2));
-  //serial_printf(">servo:%d", servo.get_Pulse_val(ID_SERVO1));
+  serial_printf(">servo1:%d", servo.get_Pulse_val(ID_SERVO1));
+  serial_printf(">servo2:%d", servo.get_Pulse_val(ID_SERVO2));
 
   delay(20);//10Hz
 }
