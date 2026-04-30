@@ -47,17 +47,13 @@ void ADC_lib::ADC_init()
 
     dig_cfg.sample_freq_hz = SAMPLING_FREQ;
     dig_cfg.conv_mode = ADC_CONV_SINGLE_UNIT_1;
-    dig_cfg.format = ADC_DIGI_OUTPUT_FORMAT_TYPE2;
+    dig_cfg.format = ADC_DIGI_OUTPUT_FORMAT_TYPE1;
     dig_cfg.pattern_num = ADC_NUM;
     dig_cfg.adc_pattern = adc_pattern;
 
-    ESP_ERROR_CHECK(
-        adc_continuous_config(adc_handle, &dig_cfg)
-    );
+    ESP_ERROR_CHECK(adc_continuous_config(adc_handle, &dig_cfg));
 
-    ESP_ERROR_CHECK(
-        adc_continuous_start(adc_handle)
-    );
+    ESP_ERROR_CHECK(adc_continuous_start(adc_handle));
 
     ADC_reset();
     Reset_ADC_th();
@@ -84,11 +80,9 @@ void ADC_lib::set_ADC_val(int emg_val1, int emg_val2, int fsr_val1, int fsr_val2
     cal_ADC_avg(ID_EMG1);
     cal_ADC_avg(ID_EMG2);
 
-    is_EMG_open =
-        (adc_val[ID_EMG1] > adc_th[ID_EMG1]);
+    is_EMG_open = (adc_val[ID_EMG1] > adc_th[ID_EMG1]);
 
-    is_EMG_close =
-        (adc_val[ID_EMG2] > adc_th[ID_EMG2]);
+    is_EMG_close = (adc_val[ID_EMG2] > adc_th[ID_EMG2]);
 }
 
 int ADC_lib::get_ADC_val(int id)
@@ -171,14 +165,16 @@ void ADC_lib::update()
 
     esp_err_t ret = adc_continuous_read(adc_handle, result, ADC_DMA_BUF_SIZE, &ret_num, READ_TIMEOUT_MS);
 
+    Serial.println(ret);
+
     if(ret == ESP_OK)
     {
         for(int i = 0; i < ret_num; i += SOC_ADC_DIGI_RESULT_BYTES)
         {
             adc_digi_output_data_t* p = (adc_digi_output_data_t*)&result[i];
 
-            uint32_t channel = p->type2.channel;
-            uint32_t data = p->type2.data;
+            uint32_t channel = p->type1.channel;
+            uint32_t data = p->type1.data;
 
             int id = -1;
 

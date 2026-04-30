@@ -43,7 +43,7 @@ void setup() {
 
 void loop() {
   //センサ値計測
-  //adc.set_ADC_val(analogRead(EMG_PIN_1), analogRead(EMG_PIN_2), analogRead(FSR_PIN_1), analogRead(FSR_PIN_2));
+  adc.update();
   bool sw_state = !((bool)digitalRead(MODE_SW));
 
    switch(flow)   //動作フロー管理
