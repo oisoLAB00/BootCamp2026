@@ -12,10 +12,10 @@
 #define ID_SERVO3 2
 
 //把持時の角度を変更したいとき, ここを変更する(600~2400の範囲)
-#define SERVO_DEFAULT_1 1500 //servo1のデフォルトの角度
-#define SERVO_DEFAULT_2 1500 //servo2のデフォルトの角度
-#define CATCH_DEG_1 1000 //servo1の把持時の角度
-#define CATCH_DEG_2 1000 //servo2の把持時の角度
+#define SERVO_DEFAULT_1 2100 //servo1のデフォルトの角度
+#define SERVO_DEFAULT_2 2100 //servo2のデフォルトの角度
+#define CATCH_DEG_1 900 //servo1の把持時の角度
+#define CATCH_DEG_2 900 //servo2の把持時の角度
 
 class Servo_lib
 {
