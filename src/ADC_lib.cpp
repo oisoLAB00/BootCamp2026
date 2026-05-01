@@ -47,7 +47,7 @@ void ADC_lib::ADC_init()
 
     dig_cfg.sample_freq_hz = SAMPLING_FREQ;
     dig_cfg.conv_mode = ADC_CONV_SINGLE_UNIT_1;
-    dig_cfg.format = ADC_DIGI_OUTPUT_FORMAT_TYPE1;
+    dig_cfg.format = ADC_DIGI_OUTPUT_FORMAT_TYPE1; //ここS3とかならTYPE2
     dig_cfg.pattern_num = ADC_NUM;
     dig_cfg.adc_pattern = adc_pattern;
 
@@ -173,8 +173,8 @@ void ADC_lib::update()
         {
             adc_digi_output_data_t* p = (adc_digi_output_data_t*)&result[i];
 
-            uint32_t channel = p->type1.channel;
-            uint32_t data = p->type1.data;
+            uint32_t channel = p->type1.channel; //ここS3とかならtype2
+            uint32_t data = p->type1.data; //ここS3とかならtype2
 
             int id = -1;
 

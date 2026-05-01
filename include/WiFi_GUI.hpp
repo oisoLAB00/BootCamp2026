@@ -16,6 +16,7 @@ struct send_data
     int mode;
 };
 
+
 class WiFi_GUI
 {
     public :

@@ -1,5 +1,7 @@
 // pio run --target uploadfs
 #include <Arduino.h>
+
+
 #include "ADC_lib.hpp"
 #include "Servo_lib.hpp"
 #include "Task_Maneger.hpp"
@@ -26,6 +28,7 @@ Task_Maneger::task_flow flow = Task_Maneger::task_flow::STOP;
 Task_Maneger::hand_state hand = Task_Maneger::hand_state::OPEN;
 WiFi_GUI wifi;
 UICommand uiCommand;
+TaskHandle_t wifiTaskHandle = NULL;
 bool is_calibed = false;
 bool is_ready = false;
 
@@ -34,17 +37,30 @@ volatile bool is_EMG_open = false;
 volatile bool is_FSR1 = false;
 volatile bool is_FSR2 = false;
 
+void wifiTask(void *pvParameters)
+{
+    while(true)
+    {
+        wifi.set_send_data(adc.get_ADC_val(ID_EMG1), adc.get_ADC_val(ID_EMG2), adc.get_ADC_val(ID_FSR1), adc.get_ADC_val(ID_FSR2), flow);
+
+        wifi.update();
+
+        vTaskDelay(pdMS_TO_TICKS(10));
+    }
+}
+
 void setup() {
   Serial.begin(SERIAL_BAUD);
   adc.ADC_init();
   servo.Servo_init();
   wifi.begin();
+  xTaskCreatePinnedToCore(wifiTask, "WiFiTask", 4096, NULL, 1, &wifiTaskHandle, 0);
 } 
 
 void loop() {
   //センサ値計測
   adc.update();
-  bool sw_state = !((bool)digitalRead(MODE_SW));
+  bool sw_on = !((bool)digitalRead(MODE_SW));
 
    switch(flow)   //動作フロー管理
   {
@@ -92,14 +108,14 @@ void loop() {
           hand = Task_Maneger::hand_state::CATCH;
         }
         if(is_FSR1){
-          servo.set_PulseWidth_id(1, CATCH_DEG_1);
+          servo.set_PulseWidth_id(ID_SERVO1, CATCH_DEG_1);
           if(is_EMG_open)
-            servo.set_PulseWidth_id(1, SERVO_DEFAULT_1);
+            servo.set_PulseWidth_id(ID_SERVO1, SERVO_DEFAULT_1);
         }
         if(is_FSR2){
-          servo.set_PulseWidth_id(2, CATCH_DEG_2);
+          servo.set_PulseWidth_id(ID_SERVO2, CATCH_DEG_2);
           if(is_EMG_open)
-            servo.set_PulseWidth_id(2, SERVO_DEFAULT_2);
+            servo.set_PulseWidth_id(ID_SERVO2, SERVO_DEFAULT_2);
         }
         break;
       case Task_Maneger::hand_state::CATCH :  //把持モードで閉じた状態
@@ -117,22 +133,25 @@ void loop() {
   servo.set_PulseWidth2(servo.get_Pulse_val(ID_SERVO1), servo.get_Pulse_val(ID_SERVO2));//ここを後で変更
 
   
-  wifi.set_send_data(adc.get_ADC_val(ID_EMG1), adc.get_ADC_val(ID_EMG2), adc.get_ADC_val(ID_FSR1), adc.get_ADC_val(ID_FSR2), flow);
-  wifi.update();
+  //wifi.set_send_data(adc.get_ADC_val(ID_EMG1), adc.get_ADC_val(ID_EMG2), adc.get_ADC_val(ID_FSR1), adc.get_ADC_val(ID_FSR2), flow);
+  //wifi.update();
  
   //シリアルモニター用
   char s[80];
   //sprintf(s, "FSR = ch1 %d,  servo %d", adc.get_ADC_val(ID_FSR1), servo.get_Pulse_val(ID_SERVO1));
-  sprintf(s,"ADC =ch1 %d, ch2  %d, ch3  %d, ch4  %d sw %d", adc.get_ADC_val(ID_EMG1), adc.get_ADC_val(ID_EMG2), adc.get_ADC_val(ID_FSR1), adc.get_ADC_val(ID_FSR2),(int)sw_state);
-  //Serial.println(s);
+  sprintf(s,"ADC =ch1 %d, ch2  %d, ch3  %d, ch4  %d sw %d", adc.get_ADC_val(ID_EMG1), adc.get_ADC_val(ID_EMG2), adc.get_ADC_val(ID_FSR1), adc.get_ADC_val(ID_FSR2),(int)sw_on);
+  Serial.println(s);
   //Teleplot用
+  /*
   serial_printf(">FSR1:%d\n", adc.get_ADC_val(ID_FSR1));
   serial_printf(">FSR2:%d\n", adc.get_ADC_val(ID_FSR2));
   serial_printf(">EMG1:%d\n", adc.get_ADC_val(ID_EMG1));
   serial_printf(">EMG2:%d\n", adc.get_ADC_val(ID_EMG2));
   serial_printf(">servo1:%d", servo.get_Pulse_val(ID_SERVO1));
   serial_printf(">servo2:%d", servo.get_Pulse_val(ID_SERVO2));
+  */
+  
 
-  delay(20);//50Hz
+  vTaskDelay(pdMS_TO_TICKS(10));//100Hz
 }
 
