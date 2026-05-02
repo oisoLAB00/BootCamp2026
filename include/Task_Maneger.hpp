@@ -6,6 +6,7 @@
 #define LED2_PIN 13
 #define LED3_PIN 15
 
+#define WAIT_TIME 50
 
 namespace Task_Maneger{
     enum class task_flow{STOP, CALIB, WORK};

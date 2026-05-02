@@ -111,6 +111,7 @@ void loop() {
           servo.set_PulseWidth_id(ID_SERVO1, CATCH_DEG_1);
           if(is_emg_active){
             servo.set_PulseWidth_id(ID_SERVO1, SERVO_DEFAULT_1);
+            is_shift_OK = false;
             break;
           }
         }
@@ -118,6 +119,7 @@ void loop() {
           servo.set_PulseWidth_id(ID_SERVO2, CATCH_DEG_2);
           if(is_emg_active){
             servo.set_PulseWidth_id(ID_SERVO2, SERVO_DEFAULT_2);
+            is_shift_OK = false;
             break;
           }
         }
@@ -152,10 +154,10 @@ void loop() {
     shift_cnt = 0;
   }
 
-  if(!is_shift_OK)
+  if(!is_shift_OK)//ハンド状態が筋電によって遷移した場合に, ちょっと待つ
   {
     shift_cnt++;
-    if(shift_cnt >= 50){
+    if(shift_cnt >= WAIT_TIME){
       is_shift_OK = true;
       shift_cnt = 0;
     }
