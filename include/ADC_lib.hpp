@@ -20,6 +20,8 @@ extern bool is_EMG_open;
 extern bool is_FSR1;
 extern bool is_FSR2;
 
+
+
 class ADC_lib
 {
     public :
@@ -63,6 +65,7 @@ class ADC_lib
         int adc_th[ADC_NUM];
         short adc_buf[EMG_NUM][BUF_SIZE];
         const int calib_time = 100;
+        int buf_index{0};
 
         void ADC_reset();
         void cal_ADC_avg(int id);

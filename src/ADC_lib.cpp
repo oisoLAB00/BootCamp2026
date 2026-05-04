@@ -2,46 +2,25 @@
 
 void ADC_lib::set_ADC_val(int emg_val1, int emg_val2, int fsr_val1, int fsr_val2)
 {
+    adc_val[FSR_PIN_1] = fsr_val1;
+    adc_val[FSR_PIN_2] = fsr_val2;
 
-    adc_val[2] = fsr_val1;
-    adc_val[3] = fsr_val2;
+    is_FSR1 = (fsr_val1 > FSR_TH_VAL);
+    is_FSR2 = (fsr_val2 > FSR_TH_VAL);
 
-    if(fsr_val1 > FSR_TH_VAL){
-        is_FSR1 = true;
-    }else{
-        is_FSR1 = false;
-    }
-    if(fsr_val2 > FSR_TH_VAL){
-        is_FSR2 = true;
-    }else{
-        is_FSR2 = false;
-    }
+    adc_buf[EMG_PIN_1][buf_index] = emg_val1;
+    adc_buf[EMG_PIN_2][buf_index] = emg_val2;
 
-    for(int size = 0; size < (BUF_SIZE-1); size++)
-    {
-        adc_buf[0][size+1] = adc_buf[0][size];
-    }
-    adc_buf[0][0] = emg_val1;
-    cal_ADC_avg(0);
+    buf_index = (buf_index + 1) % BUF_SIZE;
 
-    for(int size = 0; size < (BUF_SIZE-1); size++)
-    {
-        adc_buf[1][size+1] = adc_buf[1][size];
-    }
-    adc_buf[1][0] = emg_val2;
-    cal_ADC_avg(1);
+    cal_ADC_avg(EMG_PIN_1);
+    cal_ADC_avg(EMG_PIN_2);
 
-    
-    if(adc_val[EMG_PIN_1] > adc_th[0])
-        is_EMG_open = true;
-    else
-        is_EMG_open = false;
-    if(adc_val[EMG_PIN_2] > adc_th[1])
-        is_EMG_close = true;
-    else
-        is_EMG_close = false;
+    is_EMG_open = (adc_val[EMG_PIN_1] > adc_th[EMG_PIN_1]);
 
+    is_EMG_close = (adc_val[EMG_PIN_2] > adc_th[EMG_PIN_2]);
 }
+
 
 int ADC_lib::get_ADC_val(int id)
 {
@@ -55,10 +34,15 @@ void ADC_lib::set_ADC_th(int id, int threshold)
 
 void ADC_lib::ADC_reset()
 {
-    adc_val[EMG_PIN_1] = adc_val[EMG_PIN_2] =  0;
+    for(int i = 0; i < ADC_NUM; i++)
+    {
+        adc_val[i] = 0;
+    }
+
     for(int size = 0; size < BUF_SIZE; size++)
     {
-        for(int id=0; id < EMG_NUM; id++){
+        for(int id = 0; id < EMG_NUM; id++)
+        {
             adc_buf[id][size] = 0;
         }
     }
@@ -90,19 +74,18 @@ void ADC_lib::EMG_Calibration()
 
 void ADC_lib::set_EMG_raw_data(int emg_val1, int emg_val2)
 {
-    for(int size = 0; size < (BUF_SIZE-1); size++)
-    {
-        adc_buf[0][size+1] = adc_buf[0][size];
-    }
-    adc_buf[0][0] = emg_val1;
-    cal_ADC_avg(0);
+    adc_buf[EMG_PIN_1][buf_index] = emg_val1;
+    adc_buf[EMG_PIN_2][buf_index] = emg_val2;
 
-    for(int size = 0; size < (BUF_SIZE-1); size++)
+    cal_ADC_avg(EMG_PIN_1);
+    cal_ADC_avg(EMG_PIN_2);
+
+    buf_index++;
+
+    if(buf_index >= BUF_SIZE)
     {
-        adc_buf[1][size+1] = adc_buf[1][size];
+        buf_index = 0;
     }
-    adc_buf[1][0] = emg_val2;
-    cal_ADC_avg(1);
 }
 
 void ADC_lib::set_EMG_base(int base_1, int base_2)

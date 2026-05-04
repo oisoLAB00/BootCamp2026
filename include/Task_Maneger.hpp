@@ -2,6 +2,8 @@ namespace Task_Maneger{
     enum class task_flow{STOP, CALIB, WORK};
     enum class hand_state{OPEN, CATCH}; 
 }
+
+#define WAIT_TIME 50
 /*
 class Task_Maneger{
   public :
